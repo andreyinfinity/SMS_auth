@@ -12,7 +12,6 @@ def create_sms_jwe_token(credentials: dict) -> str:
     """Создание зашифрованного JSON токена - JWE"""
     # Создание смс кода
     sms_code = create_sms_code()
-    print(sms_code)
     # Отправка смс
     send_sms(sms_code)
     now = datetime.utcnow()

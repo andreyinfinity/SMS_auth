@@ -6,7 +6,7 @@ from rest_framework.reverse import reverse_lazy
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from users.models import User
-from users.serializers import UserSerializer, LoginSerializer, SMSCodeSerializer
+from users.serializers import UserSerializer, LoginSerializer, SMSCodeSerializer, InvitedBySerializer
 from users.services import create_sms_jwe_token, decode_sms_token
 
 
@@ -64,3 +64,31 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         """Получение самого себя в качестве объекта пользователя"""
         return User.objects.get(pk=self.request.user.pk)
+
+
+class Invitation(generics.GenericAPIView):
+    """Контроллер ввода реферального кода"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = InvitedBySerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            invited_by = serializer.data.get('invitation_code')
+            # Проверка установлен ли реферер у пользователя
+            if request.user.invited_by is not None:
+                raise APIException('You already set the invitation code', code=status.HTTP_409_CONFLICT)
+            # Получение объекта реферера по реферальному коду
+            referer = User.objects.get(invitation_code=invited_by)
+            # Если этого реферального кода ни у кого нет
+            if not referer:
+                raise APIException('User with such invitation code doest not exist')
+            # Если это собственный реферальный код
+            if referer.pk == request.user.pk:
+                raise APIException('You can not set self invitation code')
+            # Сохранение поля реферера у пользователя
+            request.user.invited_by = referer
+            request.user.save()
+            return Response(data={
+                'invited_by': referer.phone,
+            })
