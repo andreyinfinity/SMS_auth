@@ -55,7 +55,9 @@ class UserSerializer(s.ModelSerializer):
 
     def get_invited_by(self, obj: User):
         """Метод получения телефона реферера"""
-        return User.objects.get(pk=obj.invited_by.pk).phone
+        if obj.invited_by:
+            return User.objects.get(pk=obj.invited_by.pk).phone
+        return None
 
 
 class InvitedBySerializer(s.Serializer):
