@@ -1,0 +1,273 @@
+{
+	"info": {
+		"_postman_id": "0e6b2b45-b2a6-4d66-a0d6-28a8abe797bc",
+		"name": "SMS_auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28541389"
+	},
+	"item": [
+		{
+			"name": "user phone-input",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "phone",
+							"value": "89173900086",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://158.160.123.22/login/",
+					"protocol": "http",
+					"host": [
+						"158",
+						"160",
+						"123",
+						"22"
+					],
+					"path": [
+						"login",
+						""
+					],
+					"query": [
+						{
+							"key": "phone",
+							"value": "79173900086",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user sms confirmation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "sms-token",
+						"value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..lBm8N4NQxiScPbe6eaBOag.lU04QuOInUbWA8JrfKh0pEnINGVePqarxy-gz-nUYP4rb0ANULa1bz35pi_DAUSYFSf4Xv3aLB3D1wC-OwC96P2cnzjBM3dT2sFNGr3s72BC-sulY2xz2bnfnOqXqg_H76QZNnQDRh_iACuH215jGlnEsLc6fdF-pgGz_i9AuL84psnVT88-usO5jo9T4ekZoEO-Fi1c-giwdADeZ2PbESHqVBnDxe-e0YTEpEiJbAstMxAp0hAfaNQ3nLRPTes6x7ns6BPt3MLaFnjQt_U4LaIgPkgGJfCw8W8BBaHqEC-H.6P_NAUqZst7fY9IzV5ym_A",
+						"type": "text"
+					},
+					{
+						"key": "test",
+						"value": "test",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "sms_code",
+							"value": "1805",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://158.160.123.22/login/sms-confirm/",
+					"protocol": "http",
+					"host": [
+						"158",
+						"160",
+						"123",
+						"22"
+					],
+					"path": [
+						"login",
+						"sms-confirm",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzMjI0NDczLCJpYXQiOjE3MTMyMTU0NzMsImp0aSI6ImQwODNjNzBjNzMzYTQ2NWZhOThhYjlhYmY4NjY2ODgzIiwidXNlcl9pZCI6Mn0.y-KioHdCS1W2KSfJFtDiogx4lwQOadbfMBgixBgXscI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzMjIzMjA1LCJpYXQiOjE3MTMyMTQyMDUsImp0aSI6IjM1ZmY4YWMxMDFiYjQ5ZWZhNDdjYmE5Yzc3MzJlNWE2IiwidXNlcl9pZCI6Mn0.jp-YNPtqRI4N-hdCGC9xvYwUDex8Ee5lyugoYXMqDmI",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://158.160.123.22/profile/",
+					"protocol": "http",
+					"host": [
+						"158",
+						"160",
+						"123",
+						"22"
+					],
+					"path": [
+						"profile",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzMjIxMzk5LCJpYXQiOjE3MTMyMTIzOTksImp0aSI6IjQ4ZjhjYzYzY2E3NDQ5MWQ5NjhmOGExMGM4Y2NjNzVmIiwidXNlcl9pZCI6Mn0.OBLCd2qTBczQPLbceKLoAPZIU41HyIDVKISu8t84mNM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "first_name",
+							"value": "Andrey",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://158.160.123.22/profile/",
+					"protocol": "http",
+					"host": [
+						"158",
+						"160",
+						"123",
+						"22"
+					],
+					"path": [
+						"profile",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzMTkxNDk2LCJpYXQiOjE3MTMxODI0OTYsImp0aSI6ImI1NzhhZDNiN2U3NzRkNDZiNjliYmY5NDlkMmVhMjY2IiwidXNlcl9pZCI6Nn0.D3h3G0MYx5wP20N54sYR7mn49AOXH3t8zzebMLQipPM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "first_name",
+							"value": "Andrey",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://158.160.123.22/profile/",
+					"protocol": "http",
+					"host": [
+						"158",
+						"160",
+						"123",
+						"22"
+					],
+					"path": [
+						"profile",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user invitation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzMjI0MzU2LCJpYXQiOjE3MTMyMTUzNTYsImp0aSI6IjViMjdmYWQ0NTVhODRiMTFiYmRjMGNiZTYzMzYwZTcxIiwidXNlcl9pZCI6M30.QLcXvuwjLicvsTGN3uZemgEiUp4XQCsvMYzAQj2cnCQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "first_name",
+							"value": "Andrey",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "invitation_code",
+							"value": "QBX27C",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://158.160.123.22/profile/invitation/",
+					"protocol": "http",
+					"host": [
+						"158",
+						"160",
+						"123",
+						"22"
+					],
+					"path": [
+						"profile",
+						"invitation",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
