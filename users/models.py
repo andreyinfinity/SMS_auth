@@ -11,10 +11,26 @@ NULLABLE = {"blank": True, "null": True}
 class User(AbstractUser):
     """Пользователь"""
     username = None
-    phone = models.CharField(max_length=11, verbose_name='телефон', unique=True)
-    invitation_code = models.CharField(max_length=6, verbose_name='реферальный код', **NULLABLE)
-    invited_by = models.ForeignKey('self', on_delete=models.RESTRICT, verbose_name='реферер', **NULLABLE)
-    password = models.CharField(max_length=128, **NULLABLE)
+    phone = models.CharField(
+        max_length=11,
+        verbose_name='телефон',
+        unique=True
+    )
+    invitation_code = models.CharField(
+        max_length=6,
+        verbose_name='реферальный код',
+        **NULLABLE
+    )
+    invited_by = models.ForeignKey(
+        to='self',
+        on_delete=models.RESTRICT,
+        verbose_name='реферер',
+        **NULLABLE
+    )
+    password = models.CharField(
+        max_length=128,
+        **NULLABLE
+    )
 
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = []
@@ -44,9 +60,13 @@ class User(AbstractUser):
         return user
 
     def create_invitation_code(self):
-        """Метод создания реферального кода, состоящего из заглавных букв и цифр"""
+        """
+        Метод создания реферального кода,
+        состоящего из заглавных букв и цифр
+        """
         letters_and_digits = string.ascii_uppercase + string.digits
-        while invitation_code := ''.join(secrets.choice(letters_and_digits) for _ in range(6)):
+        while invitation_code := (
+                ''.join(secrets.choice(letters_and_digits) for _ in range(6))):
             if User.objects.filter(invitation_code=invitation_code).exists():
                 continue
             self.invitation_code = invitation_code

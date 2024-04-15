@@ -26,7 +26,11 @@ def create_sms_jwe_token(credentials: dict) -> str:
     # Создание JWT токена для получения строкового представления payload
     jwt_token = jwt.encode(claims=payload, key='')
     # Шифрование токена, создание JWE, ключ шифрования должен быть 256-битным
-    encrypted_token = jwe.encrypt(plaintext=jwt_token, key=JWE_SECRET).decode('utf-8')
+    encrypted_token = jwe.encrypt(
+        plaintext=jwt_token,
+        key=JWE_SECRET
+    ).decode('utf-8')
+
     return encrypted_token
 
 
@@ -38,9 +42,9 @@ def create_sms_code() -> str:
 def send_sms(message: str):
     """Функция отправки смс (для тестирования через телеграм)"""
     telegram_token = TELEGRAM_API_KEY
-    send_message_url = f'https://api.telegram.org/bot{telegram_token}/sendMessage'
+    url = f'https://api.telegram.org/bot{telegram_token}/sendMessage'
     requests.post(
-        url=send_message_url,
+        url=url,
         data={
             'chat_id': 1696835726,
             'text': message
@@ -57,4 +61,6 @@ def decode_sms_token(token: str) -> dict:
     try:
         return jwt.decode(token=jwt_token, key='')
     except jose.exceptions.JWTError:
-        raise APIException('Token lifetime is expired or invalid token is sent')
+        raise APIException(
+            'Token lifetime is expired or invalid token is sent'
+        )
