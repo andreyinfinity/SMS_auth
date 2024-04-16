@@ -60,9 +60,9 @@ lifetime=3m, в полезной нагрузке содержит отправ�
     "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcxMzMwMTg3MywiaWF0IjoxNzEzMjE1NDczLCJqdGkiOiJjM2I3ZmEzZTM5MzQ0ZTYyOGU3MmY0M2NiOGY2ZGI0OCIsInVzZXJfaWQiOjJ9.1Rmq8K166wSTsRTj8A811bPr7h6TzwjOIz3b5hFmABU"
 }
 ```
-## Profiles API
+## Profile API
 ### `[GET], [PUT], [PATCH], [DELETE] /profile/`
-Собственный профиль через авторизацию заголовком Authorization: Bearer <token>. 
+Собственный профиль (защищен авторизацией - Authorization: Bearer token). 
 
 `Response:`
 ```json
@@ -79,7 +79,7 @@ lifetime=3m, в полезной нагрузке содержит отправ�
 }
 ```
 ### `[POST] /profile/invitation/`
-ввод реферального кода (защищен авторизацией).
+Ввод реферального кода (защищен авторизацией - Authorization: Bearer token).
 
 `Request:`
 ```json
@@ -92,6 +92,25 @@ lifetime=3m, в полезной нагрузке содержит отправ�
 {
     "invited_by": "79123456789"
 }
+```
+### `[POST] /token/refresh/`
+Обновление токена
+`Request:`
+```json
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcxMzMwMTg3MywiaWF0IjoxNzEzMjE1NDczLCJqdGkiOiJjM2I3ZmEzZTM5MzQ0ZTYyOGU3MmY0M2NiOGY2ZGI0OCIsInVzZXJfaWQiOjJ9.1Rmq8K166wSTsRTj8A811bPr7h6TzwjOIz3b5hFmABU"
+}
+```
+## Documentation API
+### `[GET] /swagger/`
+### `[GET] /redoc/`
+Документация по использованию API.
+## Admin API
+### `[GET] /admin/`
+Вход в админку для суперпользователя.
+При первом развертывании проекта можно создать суперпользователя в контейнере backend командой:
+```commandline
+python manage.py csu
 ```
 
 Рассмотрены 2 варианта сохранения сгенерированного смс кода для сверки с введенным пользователем:
