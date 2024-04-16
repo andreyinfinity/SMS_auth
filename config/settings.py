@@ -163,3 +163,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
+# SMS API
+SMS_SENDER_NUMBER = os.getenv('MTS_SENDER_NUMBER')
+SMS_API_KEY = os.getenv('MTS_EXOLVE_KEY')
+SMS_API_URL = os.getenv('MTS_API_URL')
