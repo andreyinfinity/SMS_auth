@@ -6,7 +6,7 @@ import string
 from datetime import datetime, timedelta
 import jose
 from jose import jwe, jwt
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import ValidationError
 from config.settings import JWE_SECRET, TELEGRAM_API_KEY, SMS_SENDER_NUMBER, SMS_API_KEY, SMS_API_URL
 
 
@@ -76,11 +76,11 @@ def decode_sms_token(token: str) -> dict:
     try:
         jwt_token = jwe.decrypt(jwe_str=token, key=JWE_SECRET)
     except (jose.exceptions.JWEError, jose.exceptions.JWEParseError):
-        raise APIException('Invalid token')
+        raise ValidationError('Invalid token')
     # Декодирование JWT
     try:
         return jwt.decode(token=jwt_token, key='')
     except jose.exceptions.JWTError:
-        raise APIException(
+        raise ValidationError(
             'Token lifetime is expired or invalid token is sent'
         )

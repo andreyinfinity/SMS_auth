@@ -1,5 +1,5 @@
 from rest_framework import generics, status
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse_lazy
@@ -50,11 +50,11 @@ class SMSConfirmation(generics.CreateAPIView):
             sms_token = (serializer.data.get('sms_token')
                          or request.headers.get('sms-token'))
             if not sms_token:
-                raise APIException('sms token is not provided')
+                raise ValidationError('sms token is not provided')
             payload = decode_sms_token(sms_token)
             # Верификация смс кода
             if payload.get('sms_code') != user_sms_code:
-                raise APIException(
+                raise ValidationError(
                     detail='Wrong sms code',
                     code=status.HTTP_401_UNAUTHORIZED
                 )
@@ -100,23 +100,23 @@ class Invitation(generics.GenericAPIView):
             invited_by = serializer.data.get('invitation_code')
             # Проверка установлен ли реферер у пользователя
             if request.user.invited_by is not None:
-                raise APIException(
+                raise ValidationError(
                     detail='You already set the invitation code',
-                    code=status.HTTP_409_CONFLICT
+                    code=status.HTTP_400_BAD_REQUEST
                 )
             # Получение объекта реферера по реферальному коду
-            referer = User.objects.get(invitation_code=invited_by)
+            referer = User.objects.filter(invitation_code=invited_by).first()
             # Если этого реферального кода ни у кого нет
             if not referer:
-                raise APIException(
+                raise ValidationError(
                     detail='User with such invitation code doest not exist',
-                    code=status.HTTP_406_NOT_ACCEPTABLE
+                    code=status.HTTP_400_BAD_REQUEST
                 )
             # Если это собственный реферальный код
             if referer.pk == request.user.pk:
-                raise APIException(
+                raise ValidationError(
                     detail='You can not set self invitation code',
-                    code=status.HTTP_406_NOT_ACCEPTABLE
+                    code=status.HTTP_400_BAD_REQUEST
                 )
             # Сохранение поля реферера у пользователя
             request.user.invited_by = referer
