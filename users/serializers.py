@@ -4,23 +4,22 @@ from users.models import User
 
 class LoginSerializer(s.Serializer):
     """Сериализатор для проверки номера телефона российского оператора связи,
-    вводимый номер может начинаться с +7, 7 или 8, либо без кода страны"""
+    вводимый номер должен начинаться с 79..."""
     phone = s.RegexField(
-        regex=r'^((([+]{1}[7]{1})|[7]{1}|[8]{1})?[9]{1}[0-9]{9})?$',
-        min_length=10,
-        max_length=12
+        regex=r'^([7]{1}[9]{1}[0-9]{9})?$',
+        min_length=11,
+        max_length=11
     )
 
 
 class SMSCodeSerializer(s.Serializer):
     """Сериализатор вводимого кода из смс, который должен содержать 4 цифры"""
-    sms_token = s.CharField(required=False)
     sms_code = s.RegexField(
         regex=r'^[0-9]{4}?$',
         max_length=4,
         min_length=4
     )
-
+    sms_token = s.CharField(required=False)
 
 class UserSerializer(s.ModelSerializer):
     """Сериализатор модели пользователя"""

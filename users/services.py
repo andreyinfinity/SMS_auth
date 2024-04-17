@@ -1,3 +1,5 @@
+import time
+
 import requests
 import secrets
 import string
@@ -8,12 +10,17 @@ from rest_framework.exceptions import APIException
 from config.settings import JWE_SECRET, TELEGRAM_API_KEY, SMS_SENDER_NUMBER, SMS_API_KEY, SMS_API_URL
 
 
-def create_sms_jwe_token(credentials: dict) -> str:
-    """Создание зашифрованного JSON токена - JWE"""
+def create_sms_jwe_token(credentials: dict) -> tuple[str, str]:
+    """
+    Создание зашифрованного JSON токена - JWE
+    Возвращает кортеж (JWE-token, sms_code)
+    """
     # Создание смс кода
     sms_code = create_sms_code()
     # Отправка смс
     send_sms(sms_code, credentials.get('phone'))
+    # Задержка для имитации отправки смс
+    time.sleep(2)
     now = datetime.utcnow()
     # Полезные данные для токена
     payload = {
@@ -31,7 +38,7 @@ def create_sms_jwe_token(credentials: dict) -> str:
         key=JWE_SECRET
     ).decode('utf-8')
 
-    return encrypted_token
+    return encrypted_token, sms_code
 
 
 def create_sms_code() -> str:
