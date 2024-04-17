@@ -1,3 +1,5 @@
+import time
+
 import requests
 import secrets
 import string
@@ -5,15 +7,20 @@ from datetime import datetime, timedelta
 import jose
 from jose import jwe, jwt
 from rest_framework.exceptions import APIException
-from config.settings import JWE_SECRET, TELEGRAM_API_KEY
+from config.settings import JWE_SECRET, TELEGRAM_API_KEY, SMS_SENDER_NUMBER, SMS_API_KEY, SMS_API_URL
 
 
-def create_sms_jwe_token(credentials: dict) -> str:
-    """Создание зашифрованного JSON токена - JWE"""
+def create_sms_jwe_token(credentials: dict) -> tuple[str, str]:
+    """
+    Создание зашифрованного JSON токена - JWE
+    Возвращает кортеж (JWE-token, sms_code)
+    """
     # Создание смс кода
     sms_code = create_sms_code()
     # Отправка смс
-    send_sms(sms_code)
+    send_sms(sms_code, credentials.get('phone'))
+    # Задержка для имитации отправки смс
+    time.sleep(2)
     now = datetime.utcnow()
     # Полезные данные для токена
     payload = {
@@ -31,7 +38,7 @@ def create_sms_jwe_token(credentials: dict) -> str:
         key=JWE_SECRET
     ).decode('utf-8')
 
-    return encrypted_token
+    return encrypted_token, sms_code
 
 
 def create_sms_code() -> str:
@@ -39,16 +46,29 @@ def create_sms_code() -> str:
     return ''.join(secrets.choice(string.digits) for _ in range(4))
 
 
-def send_sms(message: str):
-    """Функция отправки смс (для тестирования через телеграм)"""
-    telegram_token = TELEGRAM_API_KEY
-    url = f'https://api.telegram.org/bot{telegram_token}/sendMessage'
+# def send_sms(message: str, phone):
+#     """Функция отправки смс (для тестирования через телеграм)"""
+#     url = f'https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage'
+#     requests.post(
+#         url=url,
+#         data={
+#             'chat_id': 1696835726,
+#             'text': message
+#         })
+
+def send_sms(sms_code: str, phone: str) -> None:
+    """Функция отправки смс через API сервис"""
+    text = f"{sms_code} - код для подтверждения номера телефона"
+    headers = {'Authorization': f"Bearer {SMS_API_KEY}"}
     requests.post(
-        url=url,
-        data={
-            'chat_id': 1696835726,
-            'text': message
-        })
+        url=SMS_API_URL,
+        headers=headers,
+        json={
+            "number": SMS_SENDER_NUMBER,
+            "destination": phone,
+            "text": text
+        }
+    )
 
 
 def decode_sms_token(token: str) -> dict:
